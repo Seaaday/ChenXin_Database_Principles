@@ -1,0 +1,32 @@
+以下是安装SQLite和mySQL的安装步骤和简单实用测试结果。我的系统是mac OS 10.15.1。
+
+1.SQLite
+
+首先在Runoob.com上找到了相对完整的SQLite教程。从简介上看，SQLite是一个进程内的库，是实现了自给自足的、无服务器的、零配置的、事务性的 SQL 数据库引擎。它是一个零配置的数据库，这意味着与其他数据库一样，您不需要在系统中配置。就像其他数据库，SQLite 引擎不是一个独立的进程，可以按应用程序需求进行静态或动态连接。SQLite 直接访问其存储文件。
+
+接着找到“安装”页面，点击“SQLite 下载页面”，在打开的页面中找到了“Precompiled Binaries for Mac OS X (x86)”一行，下载“sqlite-tools-osx-x86-3310100.zip(1.33 MiB)”文件。
+下载之后，打开文件夹，可见“sqldiff”、“sqlite3”和“sqlite_analyzer“三个程序文件。
+
+要想启动“sqlite3”文件，需要先在“系统偏好设置-安全性与隐私-通用”页面下方，勾选“仍要打开”选项。然后就可以启动了。
+
+启动之后，显示一个类似于txt文件的窗口，其中会显示本机信息、该文件储存位置。第一次打开文件是配置。需要再次打开程序才能正常使用。
+
+再次开启程序之后，根据指示，输入“.help"并按下回车，会显示出一系列SQLite点命令。
+
+输入“.show“命令，可以查看SQLite命令提示符的默认设置。
+
+2.mySQL
+
+打开mySQL官网，在products页面下找到mySQL Community Edition并点击Download链接。下载mySQL Community Server和mySQL Workbench。
+
+前者下载完毕之后，是一个叫做“mysql-8.0.19-macos10.15-x86_64.dmg”的文件。双击之后会出现安装器窗口，点击“继续”并且根据提示，设置Strong passport，服务器就安装完毕了。
+
+接着安装mySQL workbench，双击“mysql-workbench-community-8.0.19-macos-x86_64.dmg”，按照提示将mySQLWorkbench拖至应用程序中。安装完成。
+
+在应用程序中打开mySQL Workbench，点击mySQL Connections下面的Local instance模块，根据提示输入密码，随后进入主页面。
+
+简单测试：建立一个新的数据库
+
+点击页面上方从左至右第四个图标，会在页面中间出现Schema Editor。设置新的Schema name：“20200227”，选择字符集“utf8”，在collation中选择最后一项”utf8_unicode_ci“，然后单击下方的”apply“按钮。新的数据库就建立完毕了。
+
+初步测试结束。
