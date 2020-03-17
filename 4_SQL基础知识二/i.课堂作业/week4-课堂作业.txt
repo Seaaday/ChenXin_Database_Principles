@@ -1,0 +1,731 @@
+以下是week3课堂作业中实体和关系基础上构成的数据库：
+
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| homework4          |
+| information_schema |
+| mysql              |
+| performance_schema |
+| sys                |
++--------------------+
+5 rows in set (0.00 sec)
+
+mysql> DESC homework4;
+ERROR 1146 (42S02): Table 'homework4.homework4' doesn't exist
+mysql> show index from homework4;
+ERROR 1146 (42S02): Table 'homework4.homework4' doesn't exist
+mysql> show index from 'homework4';
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ''homework4'' at line 1
+mysql> show tables;
++---------------------+
+| Tables_in_homework4 |
++---------------------+
+| class               |
+| gra_prj             |
+| student             |
+| teacher             |
++---------------------+
+4 rows in set (0.00 sec)
+
+mysql> DESC class;
++-------+------+------+-----+---------+-------+
+| Field | Type | Null | Key | Default | Extra |
++-------+------+------+-----+---------+-------+
+| id_cl | int  | NO   | PRI | NULL    |       |
+| name  | text | YES  |     | NULL    |       |
+| id_te | int  | YES  |     | NULL    |       |
+| id    | int  | YES  | MUL | NULL    |       |
++-------+------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+mysql> DESC gra_prj;
++-------+-------------+------+-----+---------+-------+
+| Field | Type        | Null | Key | Default | Extra |
++-------+-------------+------+-----+---------+-------+
+| id_pj | varchar(12) | NO   | PRI | NULL    |       |
+| major | text        | YES  |     | NULL    |       |
+| id_te | int         | YES  |     | NULL    |       |
++-------+-------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> DESC student;
++-------+-------------+------+-----+---------+-------+
+| Field | Type        | Null | Key | Default | Extra |
++-------+-------------+------+-----+---------+-------+
+| id    | int         | NO   | PRI | NULL    |       |
+| name  | text        | YES  |     | NULL    |       |
+| age   | int         | YES  |     | NULL    |       |
+| id_te | int         | YES  | MUL | NULL    |       |
+| id_pj | varchar(12) | YES  | MUL | NULL    |       |
++-------+-------------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
+
+mysql> DESC teacher;
++-------+------+------+-----+---------+-------+
+| Field | Type | Null | Key | Default | Extra |
++-------+------+------+-----+---------+-------+
+| id_te | int  | NO   | PRI | NULL    |       |
+| name  | text | YES  |     | NULL    |       |
+| id_cl | int  | YES  | MUL | NULL    |       |
++-------+------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> 
+
+
+
+
+
+
+具体操作过程如下：
+
+mysql> SHOW DATABASES;
++--------------------+
+| Database           |
++--------------------+
+| 20200227           |
+| homework4          |
+| information_schema |
+| mysql              |
+| new_schema         |
+| performance_schema |
+| sys                |
++--------------------+
+7 rows in set (0.01 sec)
+
+mysql> drop database 20200227;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '20200227' at line 1
+mysql> drop 20200227;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '20200227' at line 1
+mysql> drop database 20200227;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '20200227' at line 1
+mysql> drop database new_schema;
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| 20200227           |
+| homework4          |
+| information_schema |
+| mysql              |
+| performance_schema |
+| sys                |
++--------------------+
+6 rows in set (0.01 sec)
+
+mysql> drop database \20200227\;
+ERROR: 
+Unknown command '\2'.
+ERROR: 
+Unknown command '\;'.
+    -> drop database `20200227`;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '\20200227\;
+drop database `20200227`' at line 1
+mysql> drop database `20200227`;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| homework4          |
+| information_schema |
+| mysql              |
+| performance_schema |
+| sys                |
++--------------------+
+5 rows in set (0.00 sec)
+
+mysql> use homework4;
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+mysql> select student;
+ERROR 1054 (42S22): Unknown column 'student' in 'field list'
+mysql> select * from student;
++------+---------+------+
+| id   | name    | age  |
++------+---------+------+
+|    1 | chenxin |   23 |
++------+---------+------+
+1 row in set (0.00 sec)
+
+mysql> insert into student(id,name,age) values(2,'xiaoli',24);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from student
+    -> ;
++------+---------+------+
+| id   | name    | age  |
++------+---------+------+
+|    1 | chenxin |   23 |
+|    2 | xiaoli  |   24 |
++------+---------+------+
+2 rows in set (0.00 sec)
+
+mysql> insert into student(id,name,age) values(3,'xiaoming',22);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from student;
++------+----------+------+
+| id   | name     | age  |
++------+----------+------+
+|    1 | chenxin  |   23 |
+|    2 | xiaoli   |   24 |
+|    3 | xiaoming |   22 |
++------+----------+------+
+3 rows in set (0.01 sec)
+
+mysql> CREATE TABLE IF NOT EXISTS teacher(
+    ->     id_te INT AUTO_INCREMENT,
+    ->     sname VARCHAR(10),
+    -> );
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ')' at line 4
+mysql> CREATE TABLE human(
+    ->     id VARCHAR(12),
+    ->     sname VARCHAR(12),
+    -> );
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ')' at line 4
+mysql> create table teacher(id_te,name);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ',name)' at line 1
+mysql> create table teacher(id_te int,name text);
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> insert into teacher(id_te,name) values(1,'liu',38);
+ERROR 1136 (21S01): Column count doesn't match value count at row 1
+mysql> insert into teacher(id_te,name) values(1,'liu');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into teacher(id_te,name) values(2,'han');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from teacher;
++-------+------+
+| id_te | name |
++-------+------+
+|     1 | liu  |
+|     2 | han  |
++-------+------+
+2 rows in set (0.00 sec)
+
+mysql> create table class(id_cl VARCHAR(12),name text);
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> insert into class values(001,'english');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from class;
++-------+---------+
+| id_cl | name    |
++-------+---------+
+| 1     | english |
++-------+---------+
+1 row in set (0.00 sec)
+
+mysql> insert into class values(002,'computer');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into class values(003,'management');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from class;
++-------+------------+
+| id_cl | name       |
++-------+------------+
+| 1     | english    |
+| 2     | computer   |
+| 3     | management |
++-------+------------+
+3 rows in set (0.00 sec)
+
+mysql> create table gra_prj(id_pj VARCHAR(12),major text);
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> insert into gra_prj values('H001','english');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from gra_prj;
++-------+---------+
+| id_pj | major   |
++-------+---------+
+| H001  | english |
++-------+---------+
+1 row in set (0.00 sec)
+
+mysql> insert into gra_prj values('H002','computer');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into gra_prj values('H003','management');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from gra_prj;
++-------+------------+
+| id_pj | major      |
++-------+------------+
+| H001  | english    |
+| H002  | computer   |
+| H003  | management |
++-------+------------+
+3 rows in set (0.00 sec)
+
+mysql> alter table grade add constraint g_id foreign key(g_id) references school(id)
+    -> ;                                                                        ERROR 1146 (42S02): Table 'homework4.grade' doesn't exist
+mysql> exit;
+Bye
+chenxin@ChendeMacBook-Pro ~ % mysql -uroot -p
+Enter password: 
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 10
+Server version: 8.0.19 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2020, Oracle and/or its affiliates. All rights reserved.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| homework4          |
+| information_schema |
+| mysql              |
+| performance_schema |
+| sys                |
++--------------------+
+5 rows in set (0.00 sec)
+
+mysql> use homework4;
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+mysql> desc homework4;
+ERROR 1146 (42S02): Table 'homework4.homework4' doesn't exist
+mysql> alter table teacher add id_cl varchar(12);
+Query OK, 0 rows affected (0.00 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> select * from gra_prj;
++-------+------------+
+| id_pj | major      |
++-------+------------+
+| H001  | english    |
+| H002  | computer   |
+| H003  | management |
++-------+------------+
+3 rows in set (0.00 sec)
+
+mysql> alter table dra_prj add id_te varchar(12);
+ERROR 1146 (42S02): Table 'homework4.dra_prj' doesn't exist
+mysql> alter table gra_prj add id_te varchar(12);
+Query OK, 0 rows affected (0.00 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> select * from teacher；
+    -> ；
+    -> ;
+ERROR 1146 (42S02): Table 'homework4.teacher；' doesn't exist
+mysql> select * from teacher;
++-------+------+-------+
+| id_te | name | id_cl |
++-------+------+-------+
+|     1 | liu  | NULL  |
+|     2 | han  | NULL  |
++-------+------+-------+
+2 rows in set (0.00 sec)
+
+mysql> select * from gra_prj;
++-------+------------+-------+
+| id_pj | major      | id_te |
++-------+------------+-------+
+| H001  | english    | NULL  |
+| H002  | computer   | NULL  |
+| H003  | management | NULL  |
++-------+------------+-------+
+3 rows in set (0.00 sec)
+
+mysql> alter table class add id_te varchar(12);
+Query OK, 0 rows affected (0.00 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> select * from class;
++-------+------------+-------+
+| id_cl | name       | id_te |
++-------+------------+-------+
+| 1     | english    | NULL  |
+| 2     | computer   | NULL  |
+| 3     | management | NULL  |
++-------+------------+-------+
+3 rows in set (0.01 sec)
+
+mysql> alter table student add id_te varchar(12);
+Query OK, 0 rows affected (0.00 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table student add id_pj varchar(12);
+Query OK, 0 rows affected (0.01 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> select * from student;
++------+----------+------+-------+-------+
+| id   | name     | age  | id_te | id_pj |
++------+----------+------+-------+-------+
+|    1 | chenxin  |   23 | NULL  | NULL  |
+|    2 | xiaoli   |   24 | NULL  | NULL  |
+|    3 | xiaoming |   22 | NULL  | NULL  |
++------+----------+------+-------+-------+
+3 rows in set (0.00 sec)
+
+mysql> ALTER DATABASE homework4 CHARACTER SET UTF8;
+Query OK, 1 row affected, 1 warning (0.00 sec)
+
+mysql> alter table student add PRIMARY key(id);
+Query OK, 0 rows affected (0.13 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc table student;
++----+-------------+---------+------------+------+---------------+------+---------+------+------+----------+-------+
+| id | select_type | table   | partitions | type | possible_keys | key  | key_len | ref  | rows | filtered | Extra |
++----+-------------+---------+------------+------+---------------+------+---------+------+------+----------+-------+
+|  1 | SIMPLE      | student | NULL       | ALL  | NULL          | NULL | NULL    | NULL |    3 |   100.00 | NULL  |
++----+-------------+---------+------------+------+---------------+------+---------+------+------+----------+-------+
+1 row in set, 1 warning (0.00 sec)
+
+mysql> DESC student;
++-------+-------------+------+-----+---------+-------+
+| Field | Type        | Null | Key | Default | Extra |
++-------+-------------+------+-----+---------+-------+
+| id    | int         | NO   | PRI | NULL    |       |
+| name  | text        | YES  |     | NULL    |       |
+| age   | int         | YES  |     | NULL    |       |
+| id_te | varchar(12) | YES  |     | NULL    |       |
+| id_pj | varchar(12) | YES  |     | NULL    |       |
++-------+-------------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
+
+mysql> alter table teacher add PRIMARY key(id_te);
+Query OK, 0 rows affected (0.12 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table gra_prj add PRIMARY key(id_pj);
+Query OK, 0 rows affected (0.12 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table class add PRIMARY key(id_cl);
+Query OK, 0 rows affected (0.12 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table gra_prj add constraint id_pj foreign key(id_pj) references student(id);
+ERROR 3780 (HY000): Referencing column 'id_pj' and referenced column 'id' in foreign key constraint 'id_pj' are incompatible.
+mysql> ALTER TABLE gra_prj
+    ->     -> ADD CONSTRAINT fk_student
+    ->     -> FOREIGN KEY(id_pj)
+    ->     -> REFERENCES student(id);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '-> ADD CONSTRAINT fk_student
+    -> FOREIGN KEY(id_pj)
+    -> REFERENCES student' at line 2
+mysql> ALTER TABLE gra_prj ADD CONSTRAINT fk_student FOREIGN KEY(id_pj) REFERENCES student(id);
+ERROR 3780 (HY000): Referencing column 'id_pj' and referenced column 'id' in foreign key constraint 'fk_student' are incompatible.
+mysql> ALTER TABLE student MODIFY id varchar(12);
+Query OK, 3 rows affected (0.01 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> alter table gra_prj add constraint id_pj foreign key(id_pj) references student(id);
+ERROR 1452 (23000): Cannot add or update a child row: a foreign key constraint fails (`homework4`.`#sql-ae_a`, CONSTRAINT `id_pj` FOREIGN KEY (`id_pj`) REFERENCES `student` (`id`))
+mysql> DESC student;
++-------+-------------+------+-----+---------+-------+
+| Field | Type        | Null | Key | Default | Extra |
++-------+-------------+------+-----+---------+-------+
+| id    | varchar(12) | NO   | PRI | NULL    |       |
+| name  | text        | YES  |     | NULL    |       |
+| age   | int         | YES  |     | NULL    |       |
+| id_te | varchar(12) | YES  |     | NULL    |       |
+| id_pj | varchar(12) | YES  |     | NULL    |       |
++-------+-------------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
+
+mysql> DESC gra_prj;
++-------+-------------+------+-----+---------+-------+
+| Field | Type        | Null | Key | Default | Extra |
++-------+-------------+------+-----+---------+-------+
+| id_pj | varchar(12) | NO   | PRI | NULL    |       |
+| major | text        | YES  |     | NULL    |       |
+| id_te | varchar(12) | YES  |     | NULL    |       |
++-------+-------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> select * from student;
++----+----------+------+-------+-------+
+| id | name     | age  | id_te | id_pj |
++----+----------+------+-------+-------+
+| 1  | chenxin  |   23 | NULL  | NULL  |
+| 2  | xiaoli   |   24 | NULL  | NULL  |
+| 3  | xiaoming |   22 | NULL  | NULL  |
++----+----------+------+-------+-------+
+3 rows in set (0.00 sec)
+
+mysql> select * from gra_prj;
++-------+------------+-------+
+| id_pj | major      | id_te |
++-------+------------+-------+
+| H001  | english    | NULL  |
+| H002  | computer   | NULL  |
+| H003  | management | NULL  |
++-------+------------+-------+
+3 rows in set (0.00 sec)
+
+mysql> insert into student(id_pj) values('H001');
+ERROR 1364 (HY000): Field 'id' doesn't have a default value
+mysql> exit;
+Bye
+chenxin@ChendeMacBook-Pro ~ % mysql -uroot -p
+Enter password: 
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 11
+Server version: 8.0.19 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2020, Oracle and/or its affiliates. All rights reserved.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> use homework4;
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+mysql> ALTER TABLE student MODIFY id int(11);
+Query OK, 3 rows affected, 1 warning (0.02 sec)
+Records: 3  Duplicates: 0  Warnings: 1
+
+mysql> DESC student;
++-------+-------------+------+-----+---------+-------+
+| Field | Type        | Null | Key | Default | Extra |
++-------+-------------+------+-----+---------+-------+
+| id    | int         | NO   | PRI | NULL    |       |
+| name  | text        | YES  |     | NULL    |       |
+| age   | int         | YES  |     | NULL    |       |
+| id_te | varchar(12) | YES  |     | NULL    |       |
+| id_pj | varchar(12) | YES  |     | NULL    |       |
++-------+-------------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
+
+mysql> ALTER TABLE student MODIFY id_te int(11);
+Query OK, 3 rows affected, 1 warning (0.01 sec)
+Records: 3  Duplicates: 0  Warnings: 1
+
+mysql> ALTER TABLE student MODIFY id_pj int(11);
+Query OK, 3 rows affected, 1 warning (0.01 sec)
+Records: 3  Duplicates: 0  Warnings: 1
+
+mysql> DESC student;
++-------+------+------+-----+---------+-------+
+| Field | Type | Null | Key | Default | Extra |
++-------+------+------+-----+---------+-------+
+| id    | int  | NO   | PRI | NULL    |       |
+| name  | text | YES  |     | NULL    |       |
+| age   | int  | YES  |     | NULL    |       |
+| id_te | int  | YES  |     | NULL    |       |
+| id_pj | int  | YES  |     | NULL    |       |
++-------+------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
+
+mysql> DESC class;
++-------+-------------+------+-----+---------+-------+
+| Field | Type        | Null | Key | Default | Extra |
++-------+-------------+------+-----+---------+-------+
+| id_cl | varchar(12) | NO   | PRI | NULL    |       |
+| name  | text        | YES  |     | NULL    |       |
+| id_te | varchar(12) | YES  |     | NULL    |       |
++-------+-------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> ALTER TABLE student MODIFY id_cl int(11);
+ERROR 1054 (42S22): Unknown column 'id_cl' in 'student'
+mysql> ALTER TABLE class modify id_cl int(11);
+Query OK, 3 rows affected, 1 warning (0.01 sec)
+Records: 3  Duplicates: 0  Warnings: 1
+
+mysql> ALTER TABLE student MODIFY id_te int(11);
+Query OK, 0 rows affected, 1 warning (0.00 sec)
+Records: 0  Duplicates: 0  Warnings: 1
+
+mysql> DESC class
+    -> ;
++-------+-------------+------+-----+---------+-------+
+| Field | Type        | Null | Key | Default | Extra |
++-------+-------------+------+-----+---------+-------+
+| id_cl | int         | NO   | PRI | NULL    |       |
+| name  | text        | YES  |     | NULL    |       |
+| id_te | varchar(12) | YES  |     | NULL    |       |
++-------+-------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> ALTER TABLE class MODIFY id_te int(11);
+Query OK, 3 rows affected, 1 warning (0.01 sec)
+Records: 3  Duplicates: 0  Warnings: 1
+
+mysql> DESC class;
++-------+------+------+-----+---------+-------+
+| Field | Type | Null | Key | Default | Extra |
++-------+------+------+-----+---------+-------+
+| id_cl | int  | NO   | PRI | NULL    |       |
+| name  | text | YES  |     | NULL    |       |
+| id_te | int  | YES  |     | NULL    |       |
++-------+------+------+-----+---------+-------+
+3 rows in set (0.01 sec)
+
+mysql> alter table class add id int(11);
+Query OK, 0 rows affected, 1 warning (0.01 sec)
+Records: 0  Duplicates: 0  Warnings: 1
+
+mysql> DESC class;
++-------+------+------+-----+---------+-------+
+| Field | Type | Null | Key | Default | Extra |
++-------+------+------+-----+---------+-------+
+| id_cl | int  | NO   | PRI | NULL    |       |
+| name  | text | YES  |     | NULL    |       |
+| id_te | int  | YES  |     | NULL    |       |
+| id    | int  | YES  |     | NULL    |       |
++-------+------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+mysql> ALTER TABLE class ADD CONSTRAINT fk_class_id FOREIGN KEY(id) REFERENCES student(id);
+Query OK, 3 rows affected (0.01 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> DESC class;
++-------+------+------+-----+---------+-------+
+| Field | Type | Null | Key | Default | Extra |
++-------+------+------+-----+---------+-------+
+| id_cl | int  | NO   | PRI | NULL    |       |
+| name  | text | YES  |     | NULL    |       |
+| id_te | int  | YES  |     | NULL    |       |
+| id    | int  | YES  | MUL | NULL    |       |
++-------+------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+mysql> ALTER TABLE student ADD CONSTRAINT fk_student_idpj FOREIGN KEY(id_pj) REFERENCES gra_prj(id_pj);
+ERROR 3780 (HY000): Referencing column 'id_pj' and referenced column 'id_pj' in foreign key constraint 'fk_student_idpj' are incompatible.
+mysql> DESC gra_prj;
++-------+-------------+------+-----+---------+-------+
+| Field | Type        | Null | Key | Default | Extra |
++-------+-------------+------+-----+---------+-------+
+| id_pj | varchar(12) | NO   | PRI | NULL    |       |
+| major | text        | YES  |     | NULL    |       |
+| id_te | varchar(12) | YES  |     | NULL    |       |
++-------+-------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> ALTER TABLE gra_prj MODIFY id_pj int(11);
+ERROR 1366 (HY000): Incorrect integer value: 'H001' for column 'id_pj' at row 1
+mysql> DESC student;
++-------+------+------+-----+---------+-------+
+| Field | Type | Null | Key | Default | Extra |
++-------+------+------+-----+---------+-------+
+| id    | int  | NO   | PRI | NULL    |       |
+| name  | text | YES  |     | NULL    |       |
+| age   | int  | YES  |     | NULL    |       |
+| id_te | int  | YES  |     | NULL    |       |
+| id_pj | int  | YES  |     | NULL    |       |
++-------+------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
+
+mysql> ALTER TABLE student MODIFY id_pj varchar(12);
+Query OK, 3 rows affected (0.01 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> DESC student;
++-------+-------------+------+-----+---------+-------+
+| Field | Type        | Null | Key | Default | Extra |
++-------+-------------+------+-----+---------+-------+
+| id    | int         | NO   | PRI | NULL    |       |
+| name  | text        | YES  |     | NULL    |       |
+| age   | int         | YES  |     | NULL    |       |
+| id_te | int         | YES  |     | NULL    |       |
+| id_pj | varchar(12) | YES  |     | NULL    |       |
++-------+-------------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
+
+mysql> DESC gra_prj;
++-------+-------------+------+-----+---------+-------+
+| Field | Type        | Null | Key | Default | Extra |
++-------+-------------+------+-----+---------+-------+
+| id_pj | varchar(12) | NO   | PRI | NULL    |       |
+| major | text        | YES  |     | NULL    |       |
+| id_te | varchar(12) | YES  |     | NULL    |       |
++-------+-------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> ALTER TABLE student ADD CONSTRAINT fk_student_idpj FOREIGN KEY(id_pj) REFERENCES gra_prj(id_pj);
+Query OK, 3 rows affected (0.01 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> ALTER TABLE gra_prj MODIFY id_te int(11);
+Query OK, 3 rows affected, 1 warning (0.02 sec)
+Records: 3  Duplicates: 0  Warnings: 1
+
+mysql> DESC gra_prj;
++-------+-------------+------+-----+---------+-------+
+| Field | Type        | Null | Key | Default | Extra |
++-------+-------------+------+-----+---------+-------+
+| id_pj | varchar(12) | NO   | PRI | NULL    |       |
+| major | text        | YES  |     | NULL    |       |
+| id_te | int         | YES  |     | NULL    |       |
++-------+-------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> DESC teacher;
++-------+-------------+------+-----+---------+-------+
+| Field | Type        | Null | Key | Default | Extra |
++-------+-------------+------+-----+---------+-------+
+| id_te | int         | NO   | PRI | NULL    |       |
+| name  | text        | YES  |     | NULL    |       |
+| id_cl | varchar(12) | YES  |     | NULL    |       |
++-------+-------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> ALTER TABLE teacher MODIFY id_cl int(11);
+Query OK, 2 rows affected, 1 warning (0.02 sec)
+Records: 2  Duplicates: 0  Warnings: 1
+
+mysql>  DESC teacher;
++-------+------+------+-----+---------+-------+
+| Field | Type | Null | Key | Default | Extra |
++-------+------+------+-----+---------+-------+
+| id_te | int  | NO   | PRI | NULL    |       |
+| name  | text | YES  |     | NULL    |       |
+| id_cl | int  | YES  |     | NULL    |       |
++-------+------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> ALTER TABLE teacher ADD CONSTRAINT fk_teacher_idcl FOREIGN KEY(id_cl) REFERENCES class(id_cl);
+Query OK, 2 rows affected (0.02 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+mysql> DESC teacher;
++-------+------+------+-----+---------+-------+
+| Field | Type | Null | Key | Default | Extra |
++-------+------+------+-----+---------+-------+
+| id_te | int  | NO   | PRI | NULL    |       |
+| name  | text | YES  |     | NULL    |       |
+| id_cl | int  | YES  | MUL | NULL    |       |
++-------+------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> ALTER TABLE student ADD CONSTRAINT fk_student_idte FOREIGN KEY(id_te) REFERENCES teacher(id_te);
+Query OK, 3 rows affected (0.02 sec)
+Records: 3  Duplicates: 0  Warnings: 0
